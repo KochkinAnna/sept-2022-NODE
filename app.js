@@ -98,3 +98,57 @@ const path = require('path');
 //         console.log(file.isFile());
 //     })
 // })
+
+
+//---------ДЗ з превьюшки------
+
+// fs.mkdir(path.join('Boys'), (err)=>{
+//     if (err) throw new Error();
+// })
+//
+// fs.mkdir(path.join('Girls'), (err)=>{
+//     if (err) throw new Error();
+// })
+
+// fs.writeFile(path.join('Boys', 'Max.json'), '{name:Max, age:29, gender:male}', (err)=>{
+//     if(err) throw new Error();
+// })
+
+// fs.writeFile(path.join('Boys', 'Anna.json'), '{name:Anna, age:27, gender:female}', (err)=>{
+//     if(err) throw new Error();
+// })
+//
+// fs.writeFile(path.join('Girls', 'Kokos.json'), '{name:Tom, age:5, gender:male}', (err)=>{
+//     if(err) throw new Error();
+// })
+//
+// fs.writeFile(path.join('Girls', 'Inna.json'), '{name:Inna, age:27, gender:female}', (err)=>{
+//     if(err) throw new Error();
+// })
+
+// fs.readFile(path.join('Boys','Anna.json'), (err, data) => {
+//     if (err) throw new Error(err.message)
+//     console.log(data.toString())
+// })
+
+// fs.rename(path.join('Boys', 'Anna.json'), path.join('Girls', 'Anna.json'), (err) => {
+//     if (err) throw new Error(err.message)
+// })
+
+// fs.readFile(path.join('Girls','Kokos.json'), (err, data) => {
+//     if (err) throw new Error(err.message)
+//     console.log(data.toString())
+// })
+//
+// fs.rename(path.join('Girls', 'Kokos.json'), path.join('Boys', 'Kokos.json'), (err) => {
+//     if (err) throw new Error(err.message)
+// })
+
+// fs.writeFile(path.join('Boys','Kokos.json'), '{name:Kokos, age:5, gender:male}', (err)=>{
+//     if(err) throw new Error();
+// })
+//
+// fs.readFile(path.join('Boys','Kokos.json'), (err, data)=>{
+//     if(err) throw new Error(err.message);
+//     console.log(data.toString());
+// })
