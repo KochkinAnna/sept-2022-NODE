@@ -1,2 +1,5 @@
 /.idea
 /sept-2022-NODE.iml
+/node_modules
+/package-lock.json
+/package.json
