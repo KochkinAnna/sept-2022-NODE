@@ -1,2 +1,6 @@
 /.idea
 /sept-2022-NODE.iml
+/node_modules
+/yarn.lock
+/package.json
+/package-lock.json
