@@ -1,54 +1,19 @@
 import { Request, Response, Router } from "express";
 
 import { userConroller } from "../controllers/user.conroller";
-import { User } from "../models/User.model";
-import { IUser } from "../types/user.types";
+import { userMiddleWare } from "../middlewares/user.middleware";
 
 const router = Router();
 
 router.get("/", userConroller.getAll);
 
-router.get(
-  "/users/:userId",
-  async (req: Request, res: Response): Promise<Response<IUser>> => {
-    const { userId } = req.params;
-    const user = await User.findById(userId);
+router.get("/:userId", userMiddleWare.getByIdAndThrow, userConroller.getById);
 
-    return res.json(user);
-  }
-);
+router.post("/", userConroller.create);
 
-router.post("/users", async (req: Request, res: Response) => {
-  const body = req.body;
-  const user = await User.create({ ...body });
+router.put("/:userId", userConroller.update);
 
-  res.status(201).json({
-    message: "User created!",
-    data: user,
-  });
-});
-
-router.put("/users/:userId", async (req: Request, res: Response) => {
-  const { userId } = req.params;
-  const user = req.body;
-
-  const updatedUserr = await User.updateOne({ _id: userId }, user);
-
-  res.status(200).json({
-    message: "User updated",
-    data: updatedUserr,
-  });
-});
-
-router.delete("/users/:userId", async (req: Request, res: Response) => {
-  const { userId } = req.params;
-
-  await User.deleteOne({ _id: userId });
-
-  res.status(200).json({
-    message: "User deleted",
-  });
-});
+router.delete("/:userId", userConroller.delete);
 
 router.get("/welcome", (req: Request, res: Response) => {
   res.send("WELCOME");
