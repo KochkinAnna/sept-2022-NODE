@@ -3,9 +3,9 @@ export interface IError extends Error {
 }
 
 export interface IMessage {
-    message: string;
+  message: string;
 }
 
-export interface ICommonResponse<T> extends IMessage{
+export interface ICommonResponse<T> extends IMessage {
   data: T;
 }

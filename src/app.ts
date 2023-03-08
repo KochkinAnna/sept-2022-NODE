@@ -1,9 +1,9 @@
 import express, { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 
-import { configs } from "./configs/config";
-import { userRouter } from "./routers/user.router";
-import { IError } from "./types/common.types";
+import { configs } from "./configs";
+import { userRouter } from "./routers";
+import { IError } from "./types";
 
 const app = express();
 

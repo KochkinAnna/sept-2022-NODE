@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 
 import { userConroller } from "../controllers/user.conroller";
-import { userMiddleWare } from "../middlewares/user.middleware";
+import { userMiddleWare } from "../middlewares";
 
 const router = Router();
 
