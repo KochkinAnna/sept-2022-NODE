@@ -1,6 +1,7 @@
 #Editor directories and files
 /.idea
-
+/package.json
+/package-lock.json
 
 #Node artifact files
 /node_modules
