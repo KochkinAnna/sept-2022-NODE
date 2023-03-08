@@ -1,22 +1,31 @@
-import { Request, Response, Router } from "express";
+import { Router } from "express";
 
-import { userConroller } from "../controllers/user.conroller";
-import { userMiddleWare } from "../middlewares";
+import { userController } from "../controllers";
+import { userMiddleware } from "../middlewares";
 
 const router = Router();
 
-router.get("/", userConroller.getAll);
+router.get("/", userController.getAll);
+router.post("/", userMiddleware.isUserValidCreate, userController.create);
 
-router.get("/:userId", userMiddleWare.getByIdAndThrow, userConroller.getById);
-
-router.post("/", userConroller.create);
-
-router.put("/:userId", userConroller.update);
-
-router.delete("/:userId", userConroller.delete);
-
-router.get("/welcome", (req: Request, res: Response) => {
-  res.send("WELCOME");
-});
+router.get(
+  "/:userId",
+  userMiddleware.isUserIdValid,
+  userMiddleware.getByIdOrThrow,
+  userController.getById
+);
+router.put(
+  "/:userId",
+  userMiddleware.isUserIdValid,
+  userMiddleware.isUserValidUpdate,
+  userMiddleware.getByIdOrThrow,
+  userController.update
+);
+router.delete(
+  "/:userId",
+  userMiddleware.isUserIdValid,
+  userMiddleware.getByIdOrThrow,
+  userController.delete
+);
 
 export const userRouter = router;

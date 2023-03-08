@@ -1,11 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 
-import { User } from "../models/User.model";
-import { userService } from "../services/user.service";
-import { ICommonResponse, IMessage } from "../types";
-import { IUser } from "../types/user.types";
+import { User } from "../models";
+import { userService } from "../services";
+import { ICommonResponse, IUser } from "../types";
 
-class UserConroller {
+class UserController {
   public async getAll(
     req: Request,
     res: Response,
@@ -24,11 +23,9 @@ class UserConroller {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<Response<IUser[]>> {
+  ): Promise<Response<IUser>> {
     try {
-      const { userId } = req.params;
-      const user = await userService.getById(userId);
-
+      const { user } = res.locals;
       return res.json(user);
     } catch (e) {
       next(e);
@@ -42,7 +39,7 @@ class UserConroller {
   ): Promise<Response<ICommonResponse<IUser>>> {
     try {
       const body = req.body;
-      const user = await User.create({ ...body });
+      const user = await User.create(body);
 
       return res.status(201).json({
         message: "User created!",
@@ -57,17 +54,17 @@ class UserConroller {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<Response<ICommonResponse<IUser>>> {
+  ): Promise<Response<IUser>> {
     try {
       const { userId } = req.params;
-      const user = req.body;
 
-      const updatedUserr = await User.updateOne({ _id: userId }, user);
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { ...req.body },
+        { new: true }
+      );
 
-      return res.status(200).json({
-        message: "User updated",
-        data: updatedUserr,
-      });
+      return res.status(201).json(updatedUser);
     } catch (e) {
       next(e);
     }
@@ -77,19 +74,17 @@ class UserConroller {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<Response<ICommonResponse<IMessage>>> {
+  ): Promise<Response<void>> {
     try {
       const { userId } = req.params;
 
       await User.deleteOne({ _id: userId });
 
-      return res.status(200).json({
-        message: "User deleted",
-      });
+      return res.sendStatus(204);
     } catch (e) {
       next(e);
     }
   }
 }
 
-export const userConroller = new UserConroller();
+export const userController = new UserController();
