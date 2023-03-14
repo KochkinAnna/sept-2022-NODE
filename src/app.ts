@@ -2,8 +2,8 @@ import express, { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 
 import { configs } from "./configs";
+import { ApiError } from "./errors";
 import { authRouter, userRouter } from "./routers";
-import { IError } from "./types";
 
 const app = express();
 
@@ -14,7 +14,7 @@ app.use("/users", userRouter);
 app.use("/auth", authRouter);
 
 // --- ERROR HANDLER ---
-app.use((err: IError, req: Request, res: Response, next: NextFunction) => {
+app.use((err: ApiError, req: Request, res: Response, next: NextFunction) => {
   const status = err.status || 500;
 
   return res.status(status).json({
