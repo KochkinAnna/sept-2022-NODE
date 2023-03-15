@@ -36,6 +36,22 @@ class AuthController {
     }
   }
 
+  public async changePassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { tokenInfo } = req.res.locals;
+      const { oldPassword, newPassword } = req.body;
+      await authService.changePassword(
+        tokenInfo._user_id,
+        oldPassword,
+        newPassword
+      );
+
+      res.sendStatus(200);
+    } catch (e) {
+      next(e);
+    }
+  }
+
   public async refresh(
     req: Request,
     res: Response,

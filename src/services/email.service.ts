@@ -3,7 +3,7 @@ import nodemailer, { Transporter } from "nodemailer";
 import * as path from "path";
 
 import { configs } from "../configs";
-import {allTemplates, EmailActions} from "../constance/email.constants";
+import { allTemplates, EmailActions } from "../constance/email.constants";
 
 class Emailervice {
   private transporter: Transporter;
