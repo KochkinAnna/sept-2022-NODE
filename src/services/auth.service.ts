@@ -1,6 +1,8 @@
+import {EmailActions} from "../constance/email.constants";
 import { ApiError } from "../errors";
 import { Token, User } from "../models";
 import { ICredentials, ITokenPair, ITokenPayload, IUser } from "../types";
+import { emailService } from "./email.service";
 import { passwordService } from "./password.service";
 import { tokenService } from "./token.service";
 
@@ -13,6 +15,8 @@ class AuthService {
         ...body,
         password: hashedPassword,
       });
+
+      await emailService.sendMail("kochkinaanichka@gmail.com", EmailActions.WELCOME);
     } catch (e) {
       throw new ApiError(e.message, e.status);
     }
