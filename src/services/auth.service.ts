@@ -17,7 +17,7 @@ class AuthService {
         password: hashedPassword,
       });
       await Promise.all([
-        smsService.sendSms("+380500554417", ESmsActions.WELCOME),
+        smsService.sendSms(body.phone, ESmsActions.WELCOME),
         emailService.sendMail(
           "kochkinaanichka@gmail.com",
           EmailActions.WELCOME
