@@ -1,9 +1,11 @@
+import path from "node:path";
+
 import EmailTamplates from "email-templates";
 import nodemailer, { Transporter } from "nodemailer";
-import * as path from "path";
 
 import { configs } from "../configs";
-import { allTemplates, EmailActions } from "../constance/email.constants";
+import { allTemplates } from "../constance";
+import { EmailActions } from "../enums";
 
 class Emailervice {
   private transporter: Transporter;
@@ -42,7 +44,7 @@ class Emailervice {
       from: "No reply",
       to: email,
       subject: teplateInfo.subject,
-      html: html,
+      html,
     });
   }
 }

@@ -1,9 +1,8 @@
-export enum EmailActions {
-  WELCOME,
-  FORGOT_PAWORD,
-}
+import { EmailActions } from "../enums";
 
-export const allTemplates = {
+export const allTemplates: {
+  [key: string]: { subject: string; templateName: string };
+} = {
   [EmailActions.WELCOME]: {
     subject: "Great to see You in our APP",
     templateName: "register",

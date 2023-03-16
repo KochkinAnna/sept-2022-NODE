@@ -1,9 +1,10 @@
-import { EmailActions } from "../constance/email.constants";
+import { EmailActions, ESmsActions } from "../enums";
 import { ApiError } from "../errors";
 import { Token, User } from "../models";
 import { ICredentials, ITokenPair, ITokenPayload, IUser } from "../types";
 import { emailService } from "./email.service";
 import { passwordService } from "./password.service";
+import { smsService } from "./sms.service";
 import { tokenService } from "./token.service";
 
 class AuthService {
@@ -15,11 +16,13 @@ class AuthService {
         ...body,
         password: hashedPassword,
       });
-
-      await emailService.sendMail(
-        "kochkinaanichka@gmail.com",
-        EmailActions.WELCOME
-      );
+      await Promise.all([
+        smsService.sendSms("+380500554417", ESmsActions.WELCOME),
+        emailService.sendMail(
+          "kochkinaanichka@gmail.com",
+          EmailActions.WELCOME
+        ),
+      ]);
     } catch (e) {
       throw new ApiError(e.message, e.status);
     }
