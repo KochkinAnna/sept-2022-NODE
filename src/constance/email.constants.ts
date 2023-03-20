@@ -7,8 +7,12 @@ export const allTemplates: {
     subject: "Great to see You in our APP",
     templateName: "register",
   },
-  [EmailActions.FORGOT_PAWORD]: {
+  [EmailActions.FORGOT_PASSWORD]: {
     subject: "We control Your password, just follow all steps",
     templateName: "forgotPassword",
+  },
+  [EmailActions.ACTIVATE]: {
+    subject: "Activate Your account",
+    templateName: "activate",
   },
 };

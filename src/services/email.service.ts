@@ -39,21 +39,25 @@ class Emailervice {
   public async sendMail(
     email: string,
     emailAction: EmailActions,
-    locals: Record<string, string>
+    locals: Record<string, string> = {}
   ) {
-    const teplateInfo = allTemplates[emailAction];
-    locals.front_URL = configs.FRONT_URL;
-    const html = await this.templateParser.render(
-      teplateInfo.templateName,
-      locals
-    );
+    try {
+      const teplateInfo = allTemplates[emailAction];
+      locals.front_URL = configs.FRONT_URL;
+      const html = await this.templateParser.render(
+        teplateInfo.templateName,
+        locals
+      );
 
-    return this.transporter.sendMail({
-      from: "No reply",
-      to: email,
-      subject: teplateInfo.subject,
-      html,
-    });
+      return this.transporter.sendMail({
+        from: "No reply",
+        to: email,
+        subject: teplateInfo.subject,
+        html,
+      });
+    } catch (e) {
+      console.error(e.message);
+    }
   }
 }
 

@@ -1,12 +1,9 @@
-import { Router } from "express";
+import {Router} from "express";
 
-import { authController } from "../controllers";
-import {
-  authMiddleware,
-  commonMiddleware,
-  userMiddleware,
-} from "../middlewares";
-import { UserValidator } from "../validators";
+import {authController} from "../controllers";
+import {EActionTokenType} from "../enums";
+import {authMiddleware, commonMiddleware, userMiddleware,} from "../middlewares";
+import {UserValidator} from "../validators";
 
 const router = Router();
 
@@ -32,14 +29,28 @@ router.post(
 );
 router.post(
   "/password/forgot",
-  userMiddleware.getDynamicallyOrThrow("email"),
+    commonMiddleware.isBodyValid(UserValidator.emailValidator),
+    userMiddleware.getDynamicallyOrThrow("email"),
   authController.forgotPassword
 );
 
 router.put(
   "/password/forgot/:token",
-  authMiddleware.chekActionForgotToken,
+    authMiddleware.checkActionToken(EActionTokenType.forgot),
   authController.setForgotPassword
+);
+
+router.post(
+  "/activate",
+  commonMiddleware.isBodyValid(UserValidator.emailValidator),
+  userMiddleware.getDynamicallyOrThrow("email"),
+  authController.sendActivateToken
+);
+
+router.put(
+  "/activate/:token",
+  authMiddleware.checkActionToken(EActionTokenType.activate),
+  authController.activate
 );
 
 router.post(

@@ -1,4 +1,9 @@
-import { EActionTokenType, EmailActions, ESmsActions } from "../enums";
+import {
+  EActionTokenType,
+  EmailActions,
+  ESmsActions,
+  EUserStatus,
+} from "../enums";
 import { ApiError } from "../errors";
 import { Action, Token, User } from "../models";
 import { ICredentials, ITokenPair, ITokenPayload, IUser } from "../types";
@@ -116,7 +121,7 @@ class AuthService {
         tokenType: EActionTokenType.forgot,
         _user_id: user._id,
       });
-      await emailService.sendMail(user.email, EmailActions.FORGOT_PAWORD, {
+      await emailService.sendMail(user.email, EmailActions.FORGOT_PASSWORD, {
         token: actionToken,
       });
     } catch (e) {
@@ -128,6 +133,36 @@ class AuthService {
     try {
       const hashedPassword = await passwordService.hash(password);
       await User.updateOne({ _id: id }, { password: hashedPassword });
+    } catch (e) {
+      throw new ApiError(e.message, e.status);
+    }
+  }
+
+  public async sendActivateToken(user: IUser): Promise<void> {
+    try {
+      const actionToken = tokenService.generateActionToken(
+        { _id: user._id },
+        EActionTokenType.activate
+      );
+      await Action.create({
+        actionToken,
+        tokenType: EActionTokenType.activate,
+        _user_id: user._id,
+      });
+      await emailService.sendMail(user.email, EmailActions.ACTIVATE, {
+        token: actionToken,
+      });
+    } catch (e) {
+      throw new ApiError(e.message, e.status);
+    }
+  }
+
+  public async activate(userId: string): Promise<void> {
+    try {
+      await User.updateOne(
+        { _id: userId },
+        { $set: { status: EUserStatus.active } }
+      );
     } catch (e) {
       throw new ApiError(e.message, e.status);
     }
