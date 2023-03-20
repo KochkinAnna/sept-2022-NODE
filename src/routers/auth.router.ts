@@ -1,9 +1,13 @@
-import {Router} from "express";
+import { Router } from "express";
 
-import {authController} from "../controllers";
-import {EActionTokenType} from "../enums";
-import {authMiddleware, commonMiddleware, userMiddleware,} from "../middlewares";
-import {UserValidator} from "../validators";
+import { authController } from "../controllers";
+import { EActionTokenType } from "../enums";
+import {
+  authMiddleware,
+  commonMiddleware,
+  userMiddleware,
+} from "../middlewares";
+import { UserValidator } from "../validators";
 
 const router = Router();
 
@@ -29,14 +33,14 @@ router.post(
 );
 router.post(
   "/password/forgot",
-    commonMiddleware.isBodyValid(UserValidator.emailValidator),
-    userMiddleware.getDynamicallyOrThrow("email"),
+  commonMiddleware.isBodyValid(UserValidator.emailValidator),
+  userMiddleware.getDynamicallyOrThrow("email"),
   authController.forgotPassword
 );
 
 router.put(
   "/password/forgot/:token",
-    authMiddleware.checkActionToken(EActionTokenType.forgot),
+  authMiddleware.checkActionToken(EActionTokenType.forgot),
   authController.setForgotPassword
 );
 

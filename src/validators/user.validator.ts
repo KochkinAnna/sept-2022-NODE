@@ -39,5 +39,4 @@ export class UserValidator {
     oldPassword: this.password.required(),
     newPassword: this.password.required(),
   });
-
 }

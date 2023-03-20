@@ -133,6 +133,10 @@ class AuthService {
     try {
       const hashedPassword = await passwordService.hash(password);
       await User.updateOne({ _id: id }, { password: hashedPassword });
+      await Token.deleteMany({
+        _user_id: id,
+        tokenType: EActionTokenType.forgot,
+      });
     } catch (e) {
       throw new ApiError(e.message, e.status);
     }
@@ -163,6 +167,10 @@ class AuthService {
         { _id: userId },
         { $set: { status: EUserStatus.active } }
       );
+      await Token.deleteMany({
+        _user_id: userId,
+        tokenType: EActionTokenType.activate,
+      });
     } catch (e) {
       throw new ApiError(e.message, e.status);
     }
