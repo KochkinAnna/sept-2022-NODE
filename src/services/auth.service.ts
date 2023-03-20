@@ -163,14 +163,16 @@ class AuthService {
 
   public async activate(userId: string): Promise<void> {
     try {
-      await User.updateOne(
-        { _id: userId },
-        { $set: { status: EUserStatus.active } }
-      );
-      await Token.deleteMany({
-        _user_id: userId,
-        tokenType: EActionTokenType.activate,
-      });
+      await Promise.all([
+        User.updateOne(
+          { _id: userId },
+          { $set: { status: EUserStatus.active } }
+        ),
+        await Token.deleteMany({
+          _user_id: userId,
+          tokenType: EActionTokenType.activate,
+        }),
+      ]);
     } catch (e) {
       throw new ApiError(e.message, e.status);
     }
