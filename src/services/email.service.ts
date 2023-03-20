@@ -36,9 +36,17 @@ class Emailervice {
     });
   }
 
-  public async sendMail(email: string, emailAction: EmailActions) {
+  public async sendMail(
+    email: string,
+    emailAction: EmailActions,
+    locals: Record<string, string>
+  ) {
     const teplateInfo = allTemplates[emailAction];
-    const html = await this.templateParser.render(teplateInfo.templateName);
+    locals.front_URL = configs.FRONT_URL;
+    const html = await this.templateParser.render(
+      teplateInfo.templateName,
+      locals
+    );
 
     return this.transporter.sendMail({
       from: "No reply",
