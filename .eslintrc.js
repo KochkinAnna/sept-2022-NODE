@@ -8,6 +8,7 @@ module.exports = {
     '@typescript-eslint/eslint-plugin',
     'simple-import-sort',
     'import',
+    'sort-exports',
   ],
   extends: [
     "plugin:prettier/recommended",
@@ -40,6 +41,7 @@ module.exports = {
       'memberSyntaxSortOrder': ['none', 'all', 'multiple', 'single'],
       'allowSeparatedGroups': false
     }],
+    'sort-exports/sort-exports': ['error', {'sortDir': 'asc'}],
   },
   ignorePatterns: ['.eslintrc.js']
 };
