@@ -1,5 +1,6 @@
-export enum EmailActions {
+export enum EEmailActions {
   WELCOME,
   FORGOT_PASSWORD,
   ACTIVATE,
+  REMINDER,
 }

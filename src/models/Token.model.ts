@@ -2,7 +2,7 @@ import { model, Schema, Types } from "mongoose";
 
 import { User } from "./User.model";
 
-const tokenSchema = new Schema(
+const tokensSchema = new Schema(
   {
     _user_id: {
       type: Types.ObjectId,
@@ -18,7 +18,10 @@ const tokenSchema = new Schema(
       required: true,
     },
   },
-  { versionKey: false }
+  {
+    versionKey: false,
+    timestamps: true,
+  }
 );
 
-export const Token = model("Token", tokenSchema);
+export const Token = model("Token", tokensSchema);

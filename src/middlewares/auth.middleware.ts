@@ -1,8 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 
-import { EActionTokenType, ETokenType } from "../enums";
+import { ETokenType } from "../enums";
+import { EActionTokenType } from "../enums/action-token-type.enum";
 import { ApiError } from "../errors";
-import { Action, OldPassword, Token } from "../models";
+import { Action, Token } from "../models";
+import { OldPassword } from "../models/Old.password.model";
 import { passwordService, tokenService } from "../services";
 
 class AuthMiddleware {
@@ -15,7 +17,7 @@ class AuthMiddleware {
       const accessToken = req.get("Authorization");
 
       if (!accessToken) {
-        throw new ApiError("No Token", 401);
+        throw new ApiError("No token", 401);
       }
 
       const jwtPayload = tokenService.checkToken(accessToken);
@@ -26,7 +28,7 @@ class AuthMiddleware {
         throw new ApiError("Token not valid", 401);
       }
 
-      req.res.locals = { tokenInfo, jwtPayload, user: tokenInfo._user_id };
+      req.res.locals = { tokenInfo, jwtPayload };
       next();
     } catch (e) {
       next(e);
@@ -42,7 +44,7 @@ class AuthMiddleware {
       const refreshToken = req.get("Authorization");
 
       if (!refreshToken) {
-        throw new ApiError("No Token", 401);
+        throw new ApiError("No token", 401);
       }
 
       const jwtPayload = tokenService.checkToken(
@@ -69,7 +71,7 @@ class AuthMiddleware {
         const actionToken = req.params.token;
 
         if (!actionToken) {
-          throw new ApiError("No Token", 401);
+          throw new ApiError("No token", 401);
         }
 
         const jwtPayload = tokenService.checkActionToken(actionToken, type);
@@ -88,36 +90,6 @@ class AuthMiddleware {
     };
   }
 
-  public async chekActionForgotToken(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    try {
-      const actionToken = req.params.token;
-
-      if (!actionToken) {
-        throw new ApiError("No Token", 401);
-      }
-
-      const jwtPayload = tokenService.checkActionToken(
-        actionToken,
-        EActionTokenType.forgot
-      );
-
-      const tokenInfo = await Action.findOne({ actionToken });
-
-      if (!tokenInfo) {
-        throw new ApiError("Token not valid", 401);
-      }
-
-      req.res.locals = { tokenInfo, jwtPayload };
-      next();
-    } catch (e) {
-      next(e);
-    }
-  }
-
   public async checkOldPassword(
     req: Request,
     res: Response,
@@ -126,9 +98,11 @@ class AuthMiddleware {
     try {
       const { body } = req;
       const { tokenInfo } = req.res.locals;
+
       const oldPasswords = await OldPassword.find({
         _user_id: tokenInfo._user_id,
       });
+
       if (!oldPasswords) return next();
 
       await Promise.all(
@@ -139,7 +113,7 @@ class AuthMiddleware {
           );
           if (isMatched) {
             throw new ApiError(
-              "Your new password is the same as Your Old",
+              "Your new password is the same as your old!",
               409
             );
           }

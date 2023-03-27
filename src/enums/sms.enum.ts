@@ -1,4 +1,4 @@
-export enum ESmsActions {
+export enum ESmsActionEnum {
   WELCOME,
-  FORGOT_PAWORD,
+  FORGOT_PASSWORD,
 }

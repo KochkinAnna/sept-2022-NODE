@@ -1,6 +1,6 @@
 import * as Joi from "joi";
 
-import { regexConstants } from "../constance";
+import { regexConstants } from "../constants";
 import { EGenders } from "../enums";
 
 export class UserValidator {

@@ -1,13 +1,13 @@
 import path from "node:path";
 
-import EmailTamplates from "email-templates";
+import EmailTemplates from "email-templates";
 import nodemailer, { Transporter } from "nodemailer";
 
 import { configs } from "../configs";
-import { allTemplates } from "../constance";
-import { EmailActions } from "../enums";
+import { allTemplates } from "../constants";
+import { EEmailActions } from "../enums";
 
-class Emailervice {
+class EmailService {
   private transporter: Transporter;
   private templateParser;
 
@@ -20,7 +20,7 @@ class Emailervice {
       },
     });
 
-    this.templateParser = new EmailTamplates({
+    this.templateParser = new EmailTemplates({
       views: {
         root: path.join(process.cwd(), "src", "statics"),
         options: {
@@ -37,22 +37,23 @@ class Emailervice {
   }
 
   public async sendMail(
-    email: string,
-    emailAction: EmailActions,
+    email: string | string[],
+    emailAction: EEmailActions,
     locals: Record<string, string> = {}
   ) {
     try {
-      const teplateInfo = allTemplates[emailAction];
-      locals.front_URL = configs.FRONT_URL;
+      const templateInfo = allTemplates[emailAction];
+      locals.frontUrl = configs.FRONT_URL;
+
       const html = await this.templateParser.render(
-        teplateInfo.templateName,
+        templateInfo.templateName,
         locals
       );
 
       return this.transporter.sendMail({
         from: "No reply",
         to: email,
-        subject: teplateInfo.subject,
+        subject: templateInfo.subject,
         html,
       });
     } catch (e) {
@@ -61,4 +62,4 @@ class Emailervice {
   }
 }
 
-export const emailService = new Emailervice();
+export const emailService = new EmailService();

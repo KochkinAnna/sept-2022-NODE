@@ -22,13 +22,8 @@ class AuthController {
     try {
       const { email, password } = req.body;
       const { user } = req.res.locals;
-      const tokenPair = await authService.login(
-        {
-          email,
-          password,
-        },
-        user
-      );
+
+      const tokenPair = await authService.login({ email, password }, user);
 
       return res.status(200).json(tokenPair);
     } catch (e) {
@@ -43,6 +38,7 @@ class AuthController {
   ): Promise<Response<ITokenPair>> {
     try {
       const { tokenInfo, jwtPayload } = req.res.locals;
+
       const tokenPair = await authService.refresh(tokenInfo, jwtPayload);
 
       return res.status(200).json(tokenPair);
@@ -55,6 +51,7 @@ class AuthController {
     try {
       const { tokenInfo } = req.res.locals;
       const { oldPassword, newPassword } = req.body;
+
       await authService.changePassword(
         tokenInfo._user_id,
         oldPassword,
@@ -90,6 +87,7 @@ class AuthController {
     try {
       const { password } = req.body;
       const { tokenInfo } = req.res.locals;
+
       await authService.setForgotPassword(
         password,
         tokenInfo._user_id,
