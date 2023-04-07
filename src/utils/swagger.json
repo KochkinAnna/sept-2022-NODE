@@ -21,7 +21,7 @@
         ],
         "parameters": [
           {
-            "in": "header",
+            "in": "3",
             "name": "Authorization",
             "required": true,
             "schema": {
