@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { authController } from "../controllers";
-import { EActionTokenType } from "../enums/action-token-type.enum";
+import { EActionTokenType } from "../enums";
 import {
   authMiddleware,
   commonMiddleware,

@@ -6,7 +6,7 @@ import { Server, Socket } from "socket.io";
 import * as swaggerUi from "swagger-ui-express";
 
 import { configs } from "./configs";
-import { cronRunner } from "./crons";
+
 import { ApiError } from "./errors";
 import { authRouter, carRouter, userRouter } from "./routers";
 import * as swaggerJson from "./utils/swagger.json";
@@ -72,9 +72,28 @@ app.use((err: ApiError, req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-server.listen(configs.PORT, async () => {
-  await mongoose.connect(configs.DB_URL);
-  cronRunner();
-  // eslint-disable-next-line no-console
-  console.log(`Server has started on PORT ${configs.PORT} 🚀🚀🚀`);
-});
+const connectionDB = async ()=>{
+  let dbCon = false;
+  while (!dbCon){
+    try{
+     "Connecting to DB..."
+      await mongoose.connect(configs.DB_URL);
+     dbCon = true
+    }catch (e) {
+      console.log("Database unavailable, wait 3 second");
+      await new Promise(resolve => setTimeout(resolve, 3000))
+    }
+  }
+}
+
+const start = async ()=>{
+  try {
+    await connectionDB()
+    await app.listen(configs.PORT, ()=>configs.HOST)
+    console.log(`Server has started on PORT ${configs.PORT} 🚀🚀🚀`);
+  }catch (e) {
+    console.log(e);
+  }
+}
+
+start()
